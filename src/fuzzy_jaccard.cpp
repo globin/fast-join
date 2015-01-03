@@ -6,11 +6,11 @@
 
 using namespace std;
 
-unique_ptr<FuzzyOverlapMap> fuzzy_overlap(string s1, string s2, double delta, const char* delims) {
+unique_ptr<tuple<FuzzyOverlapMap, size_t, size_t>> fuzzy_overlap(string s1, string s2, double delta, const char* delims) {
     vector<string> s1_tokens = *tokenize_to_vector(s1.c_str(), delims);
     vector<string> s2_tokens = *tokenize_to_vector(s2.c_str(), delims);
 
-    unique_ptr<FuzzyOverlapMap> similarities(new FuzzyOverlapMap());
+    FuzzyOverlapMap similarities;
 
     // loop over s2 -> s1 to ensure map is keyed with tokens from s1 to keep logical order
     for (size_t i = 0; i < s2_tokens.size(); i++) {
@@ -25,12 +25,14 @@ unique_ptr<FuzzyOverlapMap> fuzzy_overlap(string s1, string s2, double delta, co
             }
         }
 
-        if (similarities->count(max_j) == 0 || get<0>((*similarities)[max_j]) < max_sim) {
-            (*similarities)[max_j] = make_tuple(i, max_sim);
+        if (similarities.count(max_j) == 0 || get<0>(similarities[max_j]) < max_sim) {
+            similarities[max_j] = make_tuple(i, max_sim);
         }
     }
 
-    return similarities;
+    unique_ptr<tuple<FuzzyOverlapMap, size_t, size_t>> res(new tuple<FuzzyOverlapMap, size_t, size_t>(similarities, s1_tokens.size(), s2_tokens.size()));
+
+    return res;
 }
 
 double fuzzy_overlap_weight(const FuzzyOverlapMap &map) {
@@ -44,7 +46,11 @@ double fuzzy_jaccard_similarity(string s1, string s2, double delta) {
 }
 
 double fuzzy_jaccard_similarity(string s1, string s2, double delta, const char* delims) {
-    unique_ptr<FuzzyOverlapMap> overlap = fuzzy_overlap(s1, s2, delta, delims);
+    FuzzyOverlapMap overlap;
+    size_t s1_token_count = 0, s2_token_count = 0;
 
-    return fuzzy_overlap_weight(*overlap);
+    tie(overlap, s1_token_count, s2_token_count) = *fuzzy_overlap(s1, s2, delta, delims);
+    double weight = fuzzy_overlap_weight(overlap);
+
+    return weight / (s1_token_count + s2_token_count - weight);
 }

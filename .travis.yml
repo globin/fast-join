@@ -1,0 +1,24 @@
+language: cpp
+compiler:
+  - clang
+
+before_install:
+  - env
+  - sudo apt-get update
+  - sudo apt-get install libgtest-dev
+  - "cd /usr/src/gtest && sudo cmake . && sudo cmake --build . && sudo mv libg* /usr/local/lib/ ; cd -"
+  - git clone git://github.com/globin/libsimmetrics -b db-lab
+  - cd libsimmetrics
+  - mkdir build
+  - cd build
+  - cmake ..
+  - make
+  - sudo make install
+  - cd ../..
+
+script:
+  - mkdir build
+  - cd build
+  - cmake ..
+  - make
+  - ./test

@@ -6,9 +6,9 @@
 
 using namespace std;
 
-unique_ptr<tuple<FuzzyOverlapMap, size_t, size_t>> fuzzy_overlap(string s1, string s2, double delta, const char* delims) {
-    vector<string> s1_tokens = *tokenize_to_vector(s1.c_str(), delims);
-    vector<string> s2_tokens = *tokenize_to_vector(s2.c_str(), delims);
+unique_ptr<FuzzyOverlap> fuzzy_overlap(const string &s1, const string &s2, const double &delta, const string &delims) {
+    vector<string> s1_tokens = *tokenize_to_vector(s1.c_str(), delims.c_str());
+    vector<string> s2_tokens = *tokenize_to_vector(s2.c_str(), delims.c_str());
 
     FuzzyOverlapMap similarities;
 
@@ -30,7 +30,7 @@ unique_ptr<tuple<FuzzyOverlapMap, size_t, size_t>> fuzzy_overlap(string s1, stri
         }
     }
 
-    unique_ptr<tuple<FuzzyOverlapMap, size_t, size_t>> res(new tuple<FuzzyOverlapMap, size_t, size_t>(similarities, s1_tokens.size(), s2_tokens.size()));
+    unique_ptr<FuzzyOverlap> res(new FuzzyOverlap(similarities, s1_tokens.size(), s2_tokens.size()));
 
     return res;
 }
@@ -41,11 +41,11 @@ double fuzzy_overlap_weight(const FuzzyOverlapMap &map) {
     });
 }
 
-double fuzzy_jaccard_similarity(string s1, string s2, double delta) {
+double fuzzy_jaccard_similarity(const string &s1, const string &s2, const double &delta) {
     return fuzzy_jaccard_similarity(s1, s2, delta, WHITESPACE_DELIMITERS);
 }
 
-double fuzzy_jaccard_similarity(string s1, string s2, double delta, const char* delims) {
+double fuzzy_jaccard_similarity(const string &s1, const string &s2, const double &delta, const string &delims) {
     FuzzyOverlapMap overlap;
     size_t s1_token_count = 0, s2_token_count = 0;
 

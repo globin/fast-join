@@ -5,7 +5,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 include_directories(src/includes)
 set(SOURCE_FILES src/fast_join.cpp
-                 src/fuzzy_jaccard.cpp)
+                 src/fuzzy_similarity.cpp)
 add_library(fast_join ${SOURCE_FILES})
 target_link_libraries(fast_join simmetrics)
 

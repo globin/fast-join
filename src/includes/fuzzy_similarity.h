@@ -16,3 +16,7 @@ double fuzzy_overlap_weight(const FuzzyOverlapMap &map);
 
 double fuzzy_jaccard_similarity(const string &s1, const string &s2, const double &delta);
 double fuzzy_jaccard_similarity(const string &s1, const string &s2, const double &delta, const string &delims);
+double fuzzy_cosine_similarity(const string &s1, const string &s2, const double &delta);
+double fuzzy_cosine_similarity(const string &s1, const string &s2, const double &delta, const string &delims);
+double fuzzy_dice_similarity(const string &s1, const string &s2, const double &delta);
+double fuzzy_dice_similarity(const string &s1, const string &s2, const double &delta, const string &delims);

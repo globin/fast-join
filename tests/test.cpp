@@ -2,7 +2,7 @@
 #include <simmetrics/tokenizer.h>
 
 #include "fast_join.h"
-#include "fuzzy_jaccard.h"
+#include "fuzzy_similarity.h"
 
 TEST(FastJoinTest, ReturnCode) {
     ASSERT_EQ(0, fast_join());

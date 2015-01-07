@@ -1,8 +1,9 @@
 #include <numeric>
 #include <simmetrics/levenshtein.h>
 #include <simmetrics/tokenizer.h>
+#include <cmath>
 
-#include "fuzzy_jaccard.h"
+#include "fuzzy_similarity.h"
 
 using namespace std;
 
@@ -53,4 +54,32 @@ double fuzzy_jaccard_similarity(const string &s1, const string &s2, const double
     double weight = fuzzy_overlap_weight(overlap);
 
     return weight / (s1_token_count + s2_token_count - weight);
+}
+
+double fuzzy_cosine_similarity(const string &s1, const string &s2, const double &delta) {
+    return fuzzy_cosine_similarity(s1, s2, delta, WHITESPACE_DELIMITERS);
+}
+
+double fuzzy_cosine_similarity(const string &s1, const string &s2, const double &delta, const string &delims) {
+    FuzzyOverlapMap overlap;
+    size_t s1_token_count = 0, s2_token_count = 0;
+
+    tie(overlap, s1_token_count, s2_token_count) = *fuzzy_overlap(s1, s2, delta, delims);
+    double weight = fuzzy_overlap_weight(overlap);
+
+    return weight / sqrt(s1_token_count * s2_token_count);
+}
+
+double fuzzy_dice_similarity(const string &s1, const string &s2, const double &delta) {
+    return fuzzy_dice_similarity(s1, s2, delta, WHITESPACE_DELIMITERS);
+}
+
+double fuzzy_dice_similarity(const string &s1, const string &s2, const double &delta, const string &delims) {
+    FuzzyOverlapMap overlap;
+    size_t s1_token_count = 0, s2_token_count = 0;
+
+    tie(overlap, s1_token_count, s2_token_count) = *fuzzy_overlap(s1, s2, delta, delims);
+    double weight = fuzzy_overlap_weight(overlap);
+
+    return 2 * weight / (s1_token_count + s2_token_count);
 }

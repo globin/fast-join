@@ -3,9 +3,20 @@
 
 #include "fast_join.h"
 #include "fuzzy_similarity.h"
+#include "fuzzy_signature.h"
 
 TEST(FastJoinTest, ReturnCode) {
     ASSERT_EQ(0, fast_join());
+}
+
+TEST(FuzzySignatureTest, Partitions) {
+    vector<string> t1, t2;
+    tie(t1, t2) = partition_ned("abcdefghi", "abcdefghijkl", 0.75);
+    for (auto t1s : t1) {
+        std::cout << t1s << std::endl;
+    }
+    ASSERT_EQ(3, t2.size());
+    ASSERT_EQ(21, t1.size());
 }
 
 TEST(FuzzyJaccardSimilarity, Value) {

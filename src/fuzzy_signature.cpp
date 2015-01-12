@@ -31,5 +31,7 @@ tuple<vector<string>, vector<string>> partition_ned(const string &t, const strin
         }
     }
 
+    // TODO: pruning
+
     return make_tuple(token1_partitions, t_prime_partitions);
 }

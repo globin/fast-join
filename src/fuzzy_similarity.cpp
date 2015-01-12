@@ -1,6 +1,5 @@
 #include <numeric>
 #include <simmetrics/levenshtein.h>
-#include <simmetrics/tokenizer.h>
 #include <cmath>
 
 #include "fuzzy_similarity.h"
@@ -43,7 +42,7 @@ double fuzzy_overlap_weight(const FuzzyOverlapMap &map) {
 }
 
 double fuzzy_jaccard_similarity(const string &s1, const string &s2, const double &delta) {
-    return fuzzy_jaccard_similarity(s1, s2, delta, WHITESPACE_DELIMITERS);
+    return fuzzy_jaccard_similarity(s1, s2, delta, DEFAULT_DELIMITERS);
 }
 
 double fuzzy_jaccard_similarity(const string &s1, const string &s2, const double &delta, const string &delims) {
@@ -57,7 +56,7 @@ double fuzzy_jaccard_similarity(const string &s1, const string &s2, const double
 }
 
 double fuzzy_cosine_similarity(const string &s1, const string &s2, const double &delta) {
-    return fuzzy_cosine_similarity(s1, s2, delta, WHITESPACE_DELIMITERS);
+    return fuzzy_cosine_similarity(s1, s2, delta, DEFAULT_DELIMITERS);
 }
 
 double fuzzy_cosine_similarity(const string &s1, const string &s2, const double &delta, const string &delims) {
@@ -71,7 +70,7 @@ double fuzzy_cosine_similarity(const string &s1, const string &s2, const double 
 }
 
 double fuzzy_dice_similarity(const string &s1, const string &s2, const double &delta) {
-    return fuzzy_dice_similarity(s1, s2, delta, WHITESPACE_DELIMITERS);
+    return fuzzy_dice_similarity(s1, s2, delta, DEFAULT_DELIMITERS);
 }
 
 double fuzzy_dice_similarity(const string &s1, const string &s2, const double &delta, const string &delims) {

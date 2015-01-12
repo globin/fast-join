@@ -5,6 +5,9 @@
 #include <string>
 #include <tuple>
 #include <vector>
+#include <simmetrics/tokenizer.h>
+
+#define DEFAULT_DELIMITERS " _"
 
 using namespace std;
 

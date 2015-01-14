@@ -12,7 +12,7 @@ To run the tests call after making sure to have **libgtest** installed
 
 ```
 ./build.sh  # Will ask for password to install libsimmetrics
-./build/test
+./build/tests/test
 ```
 
 

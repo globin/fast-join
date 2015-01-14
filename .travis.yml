@@ -9,4 +9,4 @@ before_install:
 
 script:
   - ./build.sh
-  - ./build/test
+  - ./build/tests/test

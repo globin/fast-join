@@ -1,6 +1,5 @@
 #include <cmath>
 #include <tuple>
-#include <iostream>
 #include "fuzzy_signature.h"
 
 bool edit_distance_prune(int64_t len, int64_t partition_len, int64_t t_prime_partition_num, int64_t start, int64_t t_len,
@@ -10,6 +9,12 @@ bool edit_distance_prune(int64_t len, int64_t partition_len, int64_t t_prime_par
             + abs((t_len - (start + len)) - (t_prime_len - (t_prime_partition_num + 1) * partition_len));
 
     return minimal_ed > t_t2_edit_distance_threshold;
+}
+
+bool duplication_prune(int64_t start, int64_t t_prime_partition_num, int64_t partition_len,
+                       int64_t t_t2_edit_distance_threshold, int64_t t_prime_partition_count) {
+    return start > t_prime_partition_num * partition_len + t_t2_edit_distance_threshold - 2 * (t_prime_partition_count - t_prime_partition_num - 1) ||
+           start < t_prime_partition_num * partition_len - (t_t2_edit_distance_threshold - 2 * (t_prime_partition_count - t_prime_partition_num - 1));
 }
 
 tuple<vector<string>, vector<string>> partition_ned(const string &t, const string &t_prime, double delta) {
@@ -37,24 +42,23 @@ tuple<vector<string>, vector<string>> partition_ned(const string &t, const strin
     }
     // CASE 2 last partition
     for (int64_t i = token1_length_range_max - 1; i >= token1_length_range_min; i--) {
-        if (!edit_distance_prune(i, partition_len, t_prime_partitions.size() - 1, t_len - i, t_len, t_prime_len, t_t2_edit_distance_threshold)) {
+        if (!edit_distance_prune(i, partition_len, partition_count - 1, t_len - i, t_len, t_prime_len, t_t2_edit_distance_threshold)) {
             token1_partitions.push_back(t.substr(t_len - i, i));
         }
     }
     // CASE 3 middle partitions
-    for (int64_t t_prime_partition_num = t_prime_partitions.size() - 2; t_prime_partition_num > 0; t_prime_partition_num--) {
+    for (int64_t t_prime_partition_num = partition_count - 2; t_prime_partition_num > 0; t_prime_partition_num--) {
         for (int64_t start = min((int64_t) 1, t_prime_partition_num * partition_len - t_t2_edit_distance_threshold);
              start <= max(t_len - 1, t_prime_partition_num * partition_len + t_t2_edit_distance_threshold);
              start++) {
             for (int64_t len = token1_length_range_min; len < token1_length_range_max && len + start <= t_len; len++) {
-                if (!edit_distance_prune(len, partition_len, t_prime_partition_num, start, t_len, t_prime_len, t_t2_edit_distance_threshold)) {
+                if (!edit_distance_prune(len, partition_len, t_prime_partition_num, start, t_len, t_prime_len, t_t2_edit_distance_threshold) &&
+                    !duplication_prune(start, t_prime_partition_num, partition_len, t_t2_edit_distance_threshold, partition_count)) {
                     token1_partitions.push_back(t.substr(start, len));
                 }
             }
         }
     }
-
-    // TODO: duplication pruning
 
     return make_tuple(token1_partitions, t_prime_partitions);
 }

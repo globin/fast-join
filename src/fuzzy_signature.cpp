@@ -1,6 +1,11 @@
 #include <cmath>
+#include <cstdlib>
+#include <memory>
 #include <tuple>
+#include <algorithm>
 #include "fuzzy_signature.h"
+
+using namespace std::experimental;
 
 bool edit_distance_prune(int64_t len, int64_t partition_len, int64_t t_prime_partition_num, int64_t start, int64_t t_len,
                          int64_t t_prime_len, int64_t t_t2_edit_distance_threshold) {
@@ -17,7 +22,7 @@ bool duplication_prune(int64_t start, int64_t t_prime_partition_num, int64_t par
            start < t_prime_partition_num * partition_len - (t_t2_edit_distance_threshold - 2 * (t_prime_partition_count - t_prime_partition_num - 1));
 }
 
-tuple<vector<string>, vector<string>> partition_ned(const string &t, const string &t_prime, double delta) {
+tuple<vector<string_view>, vector<string_view>> partition_ned(const string_view &t, const string_view &t_prime, double delta) {
     int64_t max_edit_distance = (int64_t) floor(((1 - delta) / delta) * t_prime.length());
     int64_t partition_count = (int64_t) ceil((max_edit_distance + 1) / (double) 2);
     int64_t partition_len = (int64_t) floor(t_prime.length() / (double) partition_count);
@@ -25,15 +30,16 @@ tuple<vector<string>, vector<string>> partition_ned(const string &t, const strin
     int64_t t_len = t.length();
     int64_t t_prime_len = t_prime.length();
 
-    vector<string> t_prime_partitions; // possible to improve speed with char* hackeria
+    vector<string_view> t_prime_partitions;
     for (int64_t i = 0; i < partition_count; i++) {
         t_prime_partitions.push_back(t_prime.substr(i * partition_len, partition_len));
     }
 
     int64_t t_t2_edit_distance_threshold = (int64_t) ceil((1 - delta) * max(t_len, t_prime_len));
-    int64_t token1_length_range_min = partition_len - (int64_t) floor(t_t2_edit_distance_threshold / 2.0);
-    int64_t token1_length_range_max = partition_len + (int64_t) ceil(t_t2_edit_distance_threshold / 2.0);
-    vector<string> token1_partitions;
+    int64_t zero = 0;
+    int64_t token1_length_range_min = max(zero, min(t_len, partition_len - (int64_t) floor(t_t2_edit_distance_threshold / 2.0)));
+    int64_t token1_length_range_max = max(zero, min(t_len, partition_len + (int64_t) ceil(t_t2_edit_distance_threshold / 2.0)));
+    vector<string_view> token1_partitions;
     // CASE 1 first partition
     for (int64_t i = token1_length_range_min; i < token1_length_range_max; i++) {
         if (!edit_distance_prune(i, partition_len, 0, 0, t_len, t_prime_len, t_t2_edit_distance_threshold)) {

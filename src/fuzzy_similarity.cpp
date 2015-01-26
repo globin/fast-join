@@ -1,10 +1,11 @@
 #include <numeric>
-#include <simmetrics/levenshtein.h>
 #include <cmath>
 #include <experimental/string_view>
+#include <iostream>
 
 #include "fuzzy_similarity.h"
 #include "tokenize.h"
+#include "levenshtein.h"
 
 using namespace std;
 using namespace std::experimental;
@@ -21,7 +22,7 @@ unique_ptr<FuzzyOverlap> fuzzy_overlap(const string &s1, const string &s2, const
         size_t max_j = 0;
 
         for (size_t j = 0; j < s1_tokens.size(); j++) {
-            double lev_sim = levenshtein_similarity(s2_tokens[i].data(), s1_tokens[j].data());
+            double lev_sim = levenshtein_similarity(s2_tokens[i], s1_tokens[j]);
             if (lev_sim >= delta && lev_sim > max_sim && similarities.count(j) == 0) {
                 max_sim = lev_sim;
                 max_j = j;

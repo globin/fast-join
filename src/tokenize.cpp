@@ -1,8 +1,6 @@
 #include "tokenize.h"
-#include <string>
 
-unique_ptr<vector<string_view>>
-tokenize_string_views(const string_view &str, const string& delimiters) {
+auto tokenize_string_views(const string_view &str, const string& delimiters) -> unique_ptr<vector<string_view>> {
 
     unique_ptr<vector<string_view>> strs(new vector<string_view>);
 
@@ -20,4 +18,15 @@ tokenize_string_views(const string_view &str, const string& delimiters) {
     }
 
     return strs;
+}
+
+auto q_gram_partition(const string &str, size_t q) -> vector<string_view> {
+    auto src = string_view(str);
+    vector<string_view> res;
+
+    for (size_t i = 0; i < str.length() - (q - 1); i++) {
+        res.push_back(src.substr(i, q));
+    }
+
+    return res;
 }

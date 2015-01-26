@@ -32,7 +32,7 @@ unique_ptr<vector<tuple<size_t, size_t, double>>> fast_join(const vector<string>
             vector<string_view> sig1_tmp, sig2_tmp;
             for (string_view t1 : tokenized_data1[i]) {
                 for (string_view t2 : tokenized_data2[j]) {
-                    tie(sig1_tmp, sig2_tmp) = partition_ned(t1, t2, delta);
+                    tie(sig1_tmp, sig2_tmp) = *partition_ned(t1, t2, delta);
 
                     for (auto part : sig1_tmp) {
                         sig1.insert(part);

@@ -7,5 +7,5 @@
 using namespace std;
 using namespace std::experimental;
 
-tuple<vector<string_view>, vector<string_view>>
-        partition_ned(const string_view &t, const string_view &t_prime, double delta);
+auto partition_ned(const string_view &t, const string_view &t_prime, double delta) ->
+    unique_ptr<tuple<vector<string_view>, vector<string_view>>>;

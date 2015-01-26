@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include <simmetrics/tokenizer.h>
+#include <tokenize.h>
 
 #include "fast_join.h"
 #include "fuzzy_similarity.h"
@@ -49,7 +50,7 @@ TEST(FuzzyOverlapWeightTest, Weights) {
 }
 
 TEST(TokenizeTest, WhitespaceTokenize) {
-    ASSERT_EQ(2, tokenize_to_vector("test fnord", WHITESPACE_DELIMITERS)->size());
+    ASSERT_EQ(2, tokenize_string_views("test fnord", WHITESPACE_DELIMITERS)->size());
 }
 
 int main(int argc, char **argv) {

@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8.4)
 project(fast_join)
 
-set(CMAKE_CXX_COMPILER g++)
+set(CMAKE_CXX_COMPILER clang++)
 add_compile_options(-std=c++1y)
 add_compile_options(-g)
 

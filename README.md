@@ -2,11 +2,9 @@
 
 [![Build Status](https://travis-ci.org/globin/fast-join.svg?branch=master)](https://travis-ci.org/globin/fast-join)
 
-This is a WIP implementation of the paper 
+This is a WIP implementation of the paper
 **Fast-Join: An Efficient Method for Fuzzy Token - Matching based String Similarity Join**
 (http://dbgroup.cs.tsinghua.edu.cn/dd/list/6.pdf)
-
-This relies on my fork of libsimmetrics at https://github.com/globin/libsimmetrics in branch `db-lab`.
 
 To run the tests call after making sure to have **libgtest** installed
 

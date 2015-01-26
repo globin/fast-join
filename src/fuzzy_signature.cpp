@@ -22,13 +22,14 @@ bool duplication_prune(int64_t start, int64_t t_prime_partition_num, int64_t par
            start < t_prime_partition_num * partition_len - (t_t2_edit_distance_threshold - 2 * (t_prime_partition_count - t_prime_partition_num - 1));
 }
 
-tuple<vector<string_view>, vector<string_view>> partition_ned(const string_view &t, const string_view &t_prime, double delta) {
-    int64_t max_edit_distance = (int64_t) floor(((1 - delta) / delta) * t_prime.length());
-    int64_t partition_count = (int64_t) ceil((max_edit_distance + 1) / (double) 2);
-    int64_t partition_len = (int64_t) floor(t_prime.length() / (double) partition_count);
-
+unique_ptr<tuple<vector<string_view>, vector<string_view>>>
+partition_ned(const string_view &t, const string_view &t_prime, double delta) {
     int64_t t_len = t.length();
     int64_t t_prime_len = t_prime.length();
+
+    int64_t max_edit_distance = (int64_t) floor(((1 - delta) / delta) * t_prime_len);
+    int64_t partition_count = (int64_t) ceil((max_edit_distance + 1) / (double) 2);
+    int64_t partition_len = (int64_t) floor(t_prime_len / (double) partition_count);
 
     vector<string_view> t_prime_partitions;
     for (int64_t i = 0; i < partition_count; i++) {
@@ -66,5 +67,6 @@ tuple<vector<string_view>, vector<string_view>> partition_ned(const string_view 
         }
     }
 
-    return make_tuple(token1_partitions, t_prime_partitions);
+    unique_ptr<tuple<vector<string_view>, vector<string_view>>> result(new tuple<vector<string_view>, vector<string_view>>(token1_partitions, t_prime_partitions));
+    return result;
 }

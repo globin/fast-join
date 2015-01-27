@@ -2,10 +2,35 @@
 #include <cstdlib>
 #include <memory>
 #include <tuple>
+#include <set>
+#include <unordered_set>
 #include <algorithm>
 #include "fuzzy_signature.h"
+#include "tokenize.h"
 
 using namespace std::experimental;
+
+auto token_sensitive_sig(const vector<string_view> &token_set, double c) -> multiset<string_view> {
+    multiset<string_view> sigs;
+
+    for (const string_view &t : token_set) {
+        auto sig = q_gram_partition(t, 3);
+        sigs.insert(sig.begin(), sig.end());
+    }
+
+    unordered_set<string_view> H;
+    for (const auto &sig : sigs) {
+        if (H.count(sig) == 0) {
+            H.insert(sig);
+
+            if (H.size() >= c) break;
+        }
+        sigs.erase(sigs.begin());
+    }
+
+    return sigs;
+}
+
 
 bool edit_distance_prune(int64_t len, int64_t partition_len, int64_t t_prime_partition_num, int64_t start, int64_t t_len,
                          int64_t t_prime_len, int64_t t_t2_edit_distance_threshold) {

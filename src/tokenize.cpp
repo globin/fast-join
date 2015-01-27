@@ -20,12 +20,12 @@ auto tokenize_string_views(const string_view &str, const string& delimiters) -> 
     return strs;
 }
 
-auto q_gram_partition(const string &str, size_t q) -> vector<string_view> {
-    auto src = string_view(str);
+auto q_gram_partition(const string_view &str, size_t q) -> vector<string_view> {
     vector<string_view> res;
 
-    for (size_t i = 0; i < str.length() - (q - 1); i++) {
-        res.push_back(src.substr(i, q));
+
+    for (size_t i = 0; i < str.length() - (q - 2); i++) {
+        res.push_back(str.substr(i, q));
     }
 
     return res;

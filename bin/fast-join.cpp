@@ -26,8 +26,9 @@ unique_ptr<vector<string>> read_data(const string file_name) {
 }
 
 int main(int argv, char** argc) {
-    if (argv != 2) {
-        cerr << "Usage: " << argc[0] << " FILE_NAME" << endl;
+    if (argv < 2 || argv > 3) {
+        cerr << "Usage: " << argc[0] << " FILE_NAME FILE_NAME2" << endl;
+        return 1;
     }
 
     auto start = high_resolution_clock::now();
@@ -35,10 +36,19 @@ int main(int argv, char** argc) {
     cout << "read data: " <<
             duration_cast<duration<double>>(high_resolution_clock::now() - start).count() * 1000 << "ms" << endl;
 
+    vector<string> data2;
+    if (argv == 3) {
+        data2 = *read_data(argc[2]);
+    } else {
+        data2 = data;
+    }
+
     start = high_resolution_clock::now();
-    auto matches = *fast_join(data, data);
-    cout << "fast join: " <<
-            duration_cast<duration<double>>(high_resolution_clock::now() - start).count() * 1000 << "ms" << endl;
+    auto matches = *fast_join(data, data2);
+    cout << "fast join: " << duration_cast<duration<double>>(high_resolution_clock::now() - start).count() * 1000
+         << "ms" << endl;
+
+    cout << "matches: " << matches.size() << endl << endl;
 
     for (auto &match : matches) {
         cout << get<2>(match) << " " << get<0>(match) << " " << get<1>(match) << endl;

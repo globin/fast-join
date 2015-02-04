@@ -72,6 +72,12 @@ unique_ptr<vector<tuple<size_t, size_t, double>>> fast_join(const vector<string>
 
     cout << "fuzzy_jaccard: " <<
             duration_cast<duration<double>>(high_resolution_clock::now() - start).count() * 1000 << "ms" << endl;
+    start = high_resolution_clock::now();
+    sort(matches->begin(), matches->end());
+    cout << "sorting: " <<
+            duration_cast<duration<double>>(high_resolution_clock::now() - start).count() * 1000 << "ms" << endl;
+    auto it = unique(matches->begin(), matches->end());
+    matches->resize(distance(matches->begin(),it));
 
     return matches;
 }

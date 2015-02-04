@@ -52,7 +52,7 @@ int main(int argv, char** argc) {
 
     for (auto &match : matches) {
         cout << get<2>(match) << " " << get<0>(match) << " " << get<1>(match) << endl;
-        cout << data[get<0>(match)] << " " << data[get<1>(match)] << endl << endl;
+        cout << data[get<0>(match)] << endl << data[get<1>(match)] << endl << endl;
     }
 
     return 0;

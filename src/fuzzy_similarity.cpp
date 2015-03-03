@@ -29,7 +29,7 @@ unique_ptr<FuzzyOverlap> fuzzy_overlap(const string &s1, const string &s2, const
             }
         }
 
-        if (similarities.count(max_j) == 0 || get<0>(similarities[max_j]) < max_sim) {
+        if (similarities.count(max_j) == 0 || get<1>(similarities[max_j]) < max_sim) {
             similarities[max_j] = make_tuple(i, max_sim);
         }
     }
